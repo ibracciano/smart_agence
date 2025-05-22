@@ -5,11 +5,14 @@ from typing import List
 class AgentService:
     # creer un agent
     async def creer_agent(self, agent:AgentSchema) -> AgentSchemaResponse:
+        # print("agent", agent)
         agen_dict = agent.model_dump()
         # print(agen_dict)
-        data_search = await db.agent.find_first(where={"email" : agen_dict['email']})
-        if not data_search:
-            return None
+        # data_search = await db.agent.find_first(where={"email" : agen_dict['email']})
+
+        # print(data_search)
+        # if not data_search:
+        #     return None
         
         data = await db.agent.create(data=agen_dict)
         # print(data)

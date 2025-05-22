@@ -13,6 +13,7 @@ ticket_router = APIRouter()
 @ticket_router.post('/tickets/', response_model=TicketSchemaResponse, status_code=status.HTTP_201_CREATED)
 async def create_ticket(ticket:TicketSchema, ticket_service : TicketService = Depends()) -> dict:
     # print("Tentative de création du ticket...")
+    # print('ticket', ticket)
     try:
         ticket = await ticket_service.creer_ticket(ticket)
         # print("ticket", ticket)
