@@ -1,0 +1,89 @@
+// database
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+// generator
+generator client {
+    provider             = "prisma-client-py"
+    recursive_type_depth = 5
+}
+
+enum Categorie {
+    TRANSACTION
+    CREDIT
+    CONSEIL
+    SERVICE_CLIENT
+    CONFORMITE
+}
+
+enum StatusTicket {
+    EN_ATTENTE
+    EN_COURS
+    VALIDE
+    ECHEC
+}
+
+model Agent {
+    agent_id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    nom                 String
+    prenoms             String
+    annee_de_naissance  String
+    categorie           Categorie @default(TRANSACTION)
+    date_enregistrement DateTime  @default(now())
+    email               String    @unique
+    telephone           String
+    tickets             Ticket[]  @relation("AgentTicket")
+    status              Status[]  @relation("AgentStatus")
+}
+
+// un ticket est un client
+model Ticket {
+    id                          String    @id @default(auto()) @map("_id") @db.ObjectId
+    numero_ticket               String    @unique // numero du ticket
+    agent_id                    String?   @unique @db.ObjectId
+    date_heure_creation         DateTime  @default(now())
+    categorie_service_concernee Categorie @default(TRANSACTION)
+    description                 String?   @default("")
+
+    // relations
+    agent  Agent?  @relation("AgentTicket", fields: [agent_id], references: [agent_id])
+    status Status? @relation("TicketStatus")
+
+    @@unique([numero_ticket, agent_id])
+}
+
+model Status {
+    id            String       @id @default(auto()) @map("_id") @db.ObjectId
+    agent_id      String?      @db.ObjectId
+    numero_ticket String       @unique
+    ticket_id     String       @unique @db.ObjectId
+    date          DateTime     @default(now())
+    updated_date  DateTime     @updatedAt
+    statut        StatusTicket @default(EN_ATTENTE)
+
+    // les relations
+    ticket Ticket @relation("TicketStatus", fields: [ticket_id], references: [id])
+    agent  Agent? @relation("AgentStatus", fields: [agent_id], references: [agent_id])
+
+    @@unique([numero_ticket, ticket_id])
+}
+
+// Transaction : 
+// Cet agent s'occupe des opérations courantes des clients, 
+// comme les dépôts, les retraits, les virements et les paiements.
+
+// Conseil : 
+// Cet agent fournit des conseils financiers personnalisés aux clients, 
+// notamment en matière d'investissement, de planification de la retraite 
+// et de gestion de patrimoine.
+
+// Crédit : Cet agent est spécialisé dans les demandes de prêts, 
+// l'évaluation des dossiers et le suivi des remboursements.
+
+// Conformité : Cet agent s'assure que la banque respecte toutes les lois 
+// et réglementations en vigueur.
+
+// Service clientèle : Cet agent répond aux questions des clients, 
+// traite les plaintes et fournit une assistance générale.
