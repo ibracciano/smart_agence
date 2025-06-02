@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, constr
 from enum import Enum
 from datetime import datetime
+from typing import Optional
 
 
 class AgentCategorie(Enum):
@@ -19,6 +20,7 @@ class AgentSchema(BaseModel):
     date_enregistrement: datetime = Field(default_factory=datetime.now)
     email: str
     telephone: str = None
+    role: Optional[str] = "AGENT"
 
     class Config:
         from_attributes = True

@@ -57,6 +57,7 @@ class TicketService:
         if not agent_exist:
             return "NOT PERMITTED"
         
+        
         await db.ticket.update(
             where={
                 "numero_ticket": status_dict["numero_ticket"]

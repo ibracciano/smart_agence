@@ -18,6 +18,11 @@ enum Categorie {
     CONFORMITE
 }
 
+enum Role {
+    ADMINISTRATEUR
+    AGENT
+}
+
 enum StatusTicket {
     EN_ATTENTE
     EN_COURS
@@ -34,6 +39,7 @@ model Agent {
     date_enregistrement DateTime  @default(now())
     email               String    @unique
     telephone           String
+    role                Role      @default(AGENT)
     tickets             Ticket[]  @relation("AgentTicket")
     status              Status[]  @relation("AgentStatus")
 }

@@ -40,7 +40,8 @@ async def delete_agent(agent_id : str, agent_service : AgentService = Depends())
         agent = await agent_service.delete_agent(agent_id)
         if agent == None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Agent not found")
-        
+        if agent == "NOT PERMITTED":
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Non autorisé")
         return agent
 
     except Exception as e:

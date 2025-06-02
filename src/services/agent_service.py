@@ -39,6 +39,8 @@ class AgentService:
         # print(data_search)
         if not data_search:
             return None
+        if data_search.role != "ADMINISTRATEUR":
+            return "NOT PERMITTED"
         data_delete = await db.agent.delete(where={"agent_id" : agent_id})
         return AgentSchemaResponse(**data_delete.model_dump())
     
