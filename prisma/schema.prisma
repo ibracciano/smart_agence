@@ -48,7 +48,7 @@ model Agent {
 model Ticket {
     id                          String    @id @default(auto()) @map("_id") @db.ObjectId
     numero_ticket               String    @unique // numero du ticket
-    agent_id                    String?   @unique @db.ObjectId
+    agent_id                    String?   @db.ObjectId
     date_heure_creation         DateTime  @default(now())
     categorie_service_concernee Categorie @default(TRANSACTION)
     description                 String?   @default("")
@@ -57,7 +57,7 @@ model Ticket {
     agent  Agent?  @relation("AgentTicket", fields: [agent_id], references: [agent_id])
     status Status? @relation("TicketStatus")
 
-    @@unique([numero_ticket, agent_id])
+    // @@unique([numero_ticket])
 }
 
 model Status {

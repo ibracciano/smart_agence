@@ -22,14 +22,15 @@ async def get_all_agents(agent_service : AgentService = Depends()) -> dict:
 # route pour creer un agent
 @agent_router.post('/agents/', response_model=AgentSchemaResponse, status_code=status.HTTP_201_CREATED)
 async def create_agent(agent:AgentSchema, agent_service : AgentService = Depends()) -> dict:
-    agent = None
+    # agent = None
     try:
         agent = await agent_service.creer_agent(agent)
+        
         return agent
 
     except Exception as e:
-        if not agent: 
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Agent existe déjà')
+        # if not agent: 
+        #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Agent existe déjà')
         
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     

@@ -15,7 +15,7 @@ class AgentService:
         #     return None
         
         data = await db.agent.create(data=agen_dict)
-        # print(data)
+        print("retour ", data)
         return AgentSchemaResponse(**data.model_dump())
     
     # obternir tous les agents
